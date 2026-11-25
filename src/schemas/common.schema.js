@@ -13,7 +13,7 @@ export const passwordSchema = z
   .max(20, "Password cannot exceed 20 characters.")
   .regex(
     /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^A-Za-z0-9]).+$/,
-    "Password must contain at least one uppercase letter, one lowercase letter, one number, and one special character.",
+    "Password must contain at least one 1,@,A,a",
   );
 
 export const roleSchema = z

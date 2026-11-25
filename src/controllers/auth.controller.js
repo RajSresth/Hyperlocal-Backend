@@ -47,13 +47,13 @@ export const login = async (req, res, next) => {
     if (!existingUser) {
       const err = new Error("Invalid Email");
       err.status = 400;
-      next(err);
+      return next(err);
     }
 
     if (existingUser.role != role) {
       const err = new Error("Invalid Role No such user exist");
       err.status = 400;
-      next(err);
+      return next(err);
     }
 
     const isPasswordMatched = await bcrypt.compare(
@@ -64,7 +64,7 @@ export const login = async (req, res, next) => {
     if (!isPasswordMatched) {
       const err = new Error("Invalid Password");
       err.status = 400;
-      next(err);
+     return  next(err);
     }
 
     const jwtToken = generateToken({
@@ -72,18 +72,16 @@ export const login = async (req, res, next) => {
       email: existingUser.email,
       role: existingUser.role,
     });
-    console.log("jwtToken:", jwtToken);
+  
 
     res.cookie("token", jwtToken, {
       httpOnly: true,
       secure: process.env.NODE_ENV === "production",
       sameSite: "none",
-      path: "/products",
-      domain: "www.demo.com",
       maxAge: 7 * 24 * 60 * 60 * 1000,
     });
 
-    res.status(200).json({
+    return res.status(200).json({
       success: true,
       message: "User Loggedin Successfully",
       user: {
