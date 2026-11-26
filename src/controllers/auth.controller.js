@@ -64,7 +64,7 @@ export const login = async (req, res, next) => {
     if (!isPasswordMatched) {
       const err = new Error("Invalid Password");
       err.status = 400;
-     return  next(err);
+      return next(err);
     }
 
     const jwtToken = generateToken({
@@ -72,7 +72,6 @@ export const login = async (req, res, next) => {
       email: existingUser.email,
       role: existingUser.role,
     });
-  
 
     res.cookie("token", jwtToken, {
       httpOnly: true,
@@ -114,7 +113,9 @@ export const logout = (req, res, next) => {
 export const forgotPassword = async (req, res, next) => {
   try {
     const { email } = req.body;
+    console.log(email);
     const existingUser = await User.findOne({ email });
+    console.log(existingUser);
 
     if (!existingUser) {
       const err = new Error("Invalid Email");
